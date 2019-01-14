@@ -67,7 +67,7 @@
 
 /* Style the active/current link */
 .pagination a.active {
-  background-color: dodgerblue;
+  background-color: #17A2B8;
   border-radius: 0.2em;
   color: white;
 }
