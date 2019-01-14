@@ -30,6 +30,10 @@
     color:white;
   }
   
+  .devtitle{
+    color:rgb(3, 143, 165);
+  }
+
   .footer {
     background-color: white;
     z-index: 1;
