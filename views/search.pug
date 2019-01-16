@@ -7,10 +7,16 @@ block content
     ul.list-group
         each device, i in devices
             li.list-group-item
-                b
-                    a(href="/device/" + device._id)= device.title + "."
-                p.mt-1.mb-0= device.protocol.name + ", " + device.protocol.layer + ". "
-                p.mt-1.mb-0
-                    i= device.description
+                .row
+                    .col-md-1
+                        .thumbnail
+                            img.img-circle(src='/images/'+ device._id +'.jpg', alt= device.title, style='width:120px')
+                    .col-md-1.clear-fix
+                    .col-md-10
+                        b
+                            a(href="/device/" + device._id)= device.title + "."
+                        p.mt-1.mb-0= device.protocol.name + ", " + device.protocol.layer + ". "
+                        p.mt-1.mb-0
+                            i= device.description
                 if user
                     button.btn.btn-info.edit-dev.mt-2.float-right(data-id=device._id) Edit
