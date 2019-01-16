@@ -9,7 +9,7 @@ html(lang="en")
         link(rel="shortcut icon" href="/images/favicon.ico")
     body
         nav.navbar.navbar-expand-lg.navbar-dark.bg-info
-            a.navbar-brand(href='/') Devices
+            a.navbar-brand(href='/') Home
             button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarContent', aria-controls='navbarContent', aria-expanded='false', aria-label='Toggle navigation')
                 span.navbar-toggler-icon
             #navbarContent.collapse.navbar-collapse
@@ -25,7 +25,7 @@ html(lang="en")
                     //-         block navcontent
                 form.navbar-form.mb-0(action='/search/', method='get')
                     .input-group
-                        input#searchtxt.form-control(type='text', name='searchval', placeholder='Protocol')
+                        input#searchtxt.form-control(type='text', name='searchval', placeholder='Search protocol...')
                         input.btn.btn-info.ml-2(type='submit', value='Search')
                 ul.navbar-nav.ml-auto         
                     if user
