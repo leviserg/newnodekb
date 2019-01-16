@@ -3,7 +3,7 @@ extends layout
 //-     each device, i in devices
 //-         a(href="/device/" + device._id)= device.title
 block content
-    h2.mt-3.mb-3 #{pagetitle}
+    h2.mt-3.mb-3.text-info #{pagetitle}
     ul.list-group
         each device, i in devices
             li.list-group-item
