@@ -22,7 +22,7 @@ let myDevice = require('../models/device');
             }
             else{         
                 res.render('index', {
-                    pagetitle:'Digital Inteface Devices',
+                    pagetitle:'Digital Interface Devices',
                     devices: data.docs,
                     total: data.total,
                     limit: data.limit,

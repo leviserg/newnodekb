@@ -18,15 +18,20 @@ block content
     //-     input.btn.btn-success.mt-2.mr-2.col-sm-4.col-md-2(type='submit', value='Save')
     //-     a.btn.btn-danger.mt-2.mr-2.col-sm-4.col-md-2.del-dev(href='#', data-id=showDevice._id) Delete
     //-     a.btn.btn-primary.mt-2.mr-2.col-sm-4.col-md-2(href='/') Back
+    
     #form-group
         label.small Title:
         p.form-control= showDevice.title
+    #form-group
+        p.small.text-center Image:
+        p.text-center
+            img.img-circle(src='/images/'+ showDevice._id +'.jpg', alt= showDevice.title, style='width:20%')        
     #form-group
         label.small.mt-2 Protocol:
         p.form-control= showDevice.protocol.name + ', ' + showDevice.protocol.layer
     #form-group
         label.small.mt-2 Description:
-        p.form-control= showDevice.description
+        p= showDevice.description
         hr
-    a.btn.btn-primary.mt-2.mr-2.col-sm-4.col-md-2(href='/') Back
+    a.btn.btn-info.mt-2.mr-2.col-sm-4.col-md-2(href='/') Back
     

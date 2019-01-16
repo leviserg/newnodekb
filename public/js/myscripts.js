@@ -39,12 +39,15 @@ $(document).ready(()=>{
                 form.attr('action', '/device/' + selDevice._id);
                 $('#ModDevTitle').html(selDevice.title);
                 document.getElementById('ModEditTitle').value = selDevice.title;
-                document.getElementById('ModEditDescription').value = selDevice.description; 
+                document.getElementById('ModEditDescription').value = selDevice.description;
                 $("select[name='protocol']").empty();
-                $("select[name='protocol']").append('<option value="' + selDevice.protocol._id + '">'+ selDevice.protocol.name + '. ' + selDevice.protocol.layer + '</option>');	
-                for(let i = 0; i < Protocols.length; i++){
-                    $("select[name='protocol']").append("<option value="+Protocols[i]._id+">"+Protocols[i].name + '. ' + Protocols[i].layer +"</option>");
-                }
+                    $("select[name='protocol']").append('<option value="' + selDevice.protocol._id + '">'+ selDevice.protocol.name + '. ' + selDevice.protocol.layer + '</option>');	
+                    for(let i = 0; i < Protocols.length; i++){
+                        $("select[name='protocol']").append("<option value="+Protocols[i]._id+">"+Protocols[i].name + '. ' + Protocols[i].layer +"</option>");
+                    }
+                $('#imgfile').text(selDevice._id + '.jpg');
+                $('#ModImg').attr('src', '/images/'+ selDevice._id +'.jpg');
+                $('#ModImg').attr('alt', selDevice.title);
                 $('#ModDelBtn').attr('data-id', selDevice._id);
             },
             error: (err)=>{

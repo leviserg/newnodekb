@@ -3,7 +3,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
-
+const upload = require('express-fileupload');
+const fs = require('fs');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
@@ -14,18 +15,20 @@ const port = process.env.PORT || 8080;
 // using DOM-parser & json-parser as Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended:false }));
 app.use(bodyParser.json());
+app.use(upload());
 
 // Set Public Folder for scripts & css - will include content automatically
 app.use(express.static(path.join(__dirname, 'public')));
 
 // =============== Middleware ==============
-	// ---- Session Middleware
+
+    // ---- Session Middleware
         app.use(session({
             secret: 'keys',
             resave: true,
             saveUninitialized: true
         }));
-        
+
     // ---- Messages Middleware
 
         app.use(require('connect-flash')());

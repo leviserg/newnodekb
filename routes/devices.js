@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
 
 let myProtocol = require('../models/protocol');
 let myDevice = require('../models/device');
@@ -21,6 +22,7 @@ let myDevice = require('../models/device');
     
     // Add Device Submit POST Route
     router.post('/add', (req, res) => {    
+/*
         req.checkBody('title', 'Title is required').notEmpty();
         req.checkBody('protocol', 'Protocol is required').notEmpty();
         req.checkBody('description', 'Description is required').notEmpty();
@@ -40,12 +42,15 @@ let myDevice = require('../models/device');
                     });
                 }
             });
+/*      
         }
         else{
+*/     
             let device = new myDevice();
             device.title = req.body.title;
             device.protocol = req.body.protocol;
             device.description = req.body.description;
+
             let xDate = new Date();
             device.date_ = xDate.toJSON();
             device.save((err) => {
@@ -53,11 +58,25 @@ let myDevice = require('../models/device');
                     console.log(err);
                     return false;
                 } else {
-                    req.flash('success', 'Device Added');
-                    res.redirect('/');
+                    if(req.files){
+                        let file = req.files.devimg;
+                        file.mv('./public/images/' + device._id + '.jpg', (err)=>{
+                            if(err){
+                                console.log(err);
+                            }
+                            else {
+                                req.flash('success', 'Device Added');
+                                res.redirect('/');
+                            }
+                        });
+                    }
+                    else{
+                        req.flash('danger', 'Image not uploaded');
+                        res.redirect('/');
+                    }
                 }
             });
-        }
+//      }       
     });
 
     // Get Single Device Data
@@ -119,8 +138,26 @@ let myDevice = require('../models/device');
                 if(err){
                     console.log(err);
                 } else {
+                    if(req.files){
+                        let file = req.files.devimg;
+                        file.mv('./public/images/' + query._id + '.jpg', (err)=>{
+                            if(err){
+                                console.log(err);
+                            }
+                            else {
+                                req.flash('success', 'Device Data has been updated');
+                                res.redirect('/');
+                            }
+                        });
+                    }
+                    else{
+                        req.flash('success', 'Device Data updated / Image not updated');
+                        res.redirect('/');
+                    }
+/*
                     req.flash('success', 'Device Data has been updated');
                     res.redirect('/');
+*/                    
                 }
             });
     });
@@ -131,12 +168,19 @@ let myDevice = require('../models/device');
         if(!req.user._id){
             res.status(500).send();
         } else {
-            let query = {_id:req.params.id}; 
-            myDevice.deleteOne(query, (err) => {
-                if(err){
-                    console.log(err);
-                }
-                res.send('Deleted...');
+            let query = {_id:req.params.id};
+            let path = './public/images/' + query._id + '.jpg';
+           myDevice.deleteOne(query, (err) => {
+               if(err){
+                   console.log(err);
+               }
+                fs.unlink(path, function() {
+                    res.send ({
+                        status: "200",
+                        responseType: "string",
+                        response: "Deleted..."
+                    });
+                });
             });
         }
     });

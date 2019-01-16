@@ -3,7 +3,7 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title Local Base
+        title Industry Interface Devices
         link(href="/bower_components/bootstrap/dist/css/bootstrap.css", rel="stylesheet")
         link(href="/css/mystyles.css", rel="stylesheet")
         link(rel="shortcut icon" href="/images/favicon.ico")
@@ -60,9 +60,9 @@ html(lang="en")
                     .container
                         ul.nav.nav-tabs
                             li.active
-                                a.nav-link(data-toggle='tab', title='Already registered?', href='#login') Login
+                                a.nav-link.text-info(data-toggle='tab', title='Already registered?', href='#login') Login
                             li
-                                a.nav-link(data-toggle='tab', title="Aren't registered?", href='#register') Register
+                                a.nav-link.text-info(data-toggle='tab', title="Aren't registered?", href='#register') Register
                         .tab-content
                             #login.tab-pane.in.active
                                 br
@@ -74,7 +74,7 @@ html(lang="en")
                                     #form-group
                                         label.mt-2 Enter Your Password:
                                         input.form-control(name='password', type="password")             
-                                    input.btn.btn-primary.mt-4.col-12(type="submit", value="Login")
+                                    input.btn.btn-info.mt-4.col-12(type="submit", value="Login")
                             #register.tab-pane.fade
                                 br
                                 h2.mt-3.mb-3 User Registration Form
@@ -95,7 +95,7 @@ html(lang="en")
                                         #form-group
                                             label.small.mt-2 Confirm Your Password:*
                                             input.form-control(name='pwd2', type="password")                
-                                        input.btn.btn-primary.mt-4.col-12(type="submit", value="Save")
+                                        input.btn.btn-info.mt-4.col-12(type="submit", value="Save")
                 //-.modal-footer
                 //-    hr
     #EditModal.modal.modal-fade(tabindex='2')
@@ -107,17 +107,26 @@ html(lang="en")
                         span(aria-hidden='true') ×
                 .modal-body
                     .container
-                        h2#ModDevTitle.mt-3.mb-3
-                        form(method='post', name='ModForm')
-                            #form-group
+                        .row
+                            .col-7
+                                h2#ModDevTitle.mt-3.mb-3.text-info
+                            .col-1.clear-fix
+                            .col-4
+                                img#ModImg.img-circle(style='width:100%')
+                        form(method='post', name='ModForm', enctype="multipart/form-data")
+                            .form-group
                                 label.small Title:
                                 input#ModEditTitle.form-control(name='title', type="text")
-                            #form-group
+                            .form-group
                                 label.small.mt-2 Protocol:
                                 select#ModEditProtocol.form-control(name='protocol')
-                            #form-group
+                            .form-group
                                 label.small.mt-2 Description:
                                 textarea#ModEditDescription.form-control(name='description')
+                            .input-group
+                                .custom-file
+                                    input#moddevimg.custom-file-input(name='devimg', type='file', aria-describedby="devimgAddon")
+                                    label#imgfile.custom-file-label(for='moddevimg' style='color:lightgrey') Select Image
                                 hr
                             input.btn.btn-success.mt-2.mr-2.col-sm-4.col-md-2(type='submit', value='Save')
                             a#ModDelBtn.btn.btn-danger.mt-2.mr-2.col-sm-4.col-md-2.del-dev(href='#') Delete
