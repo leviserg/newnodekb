@@ -18,5 +18,5 @@ block content
                         p.mt-1.mb-0= device.protocol.name + ", " + device.protocol.layer + ". "
                         p.mt-1.mb-0
                             i= device.description
-                if user
-                    button.btn.btn-info.edit-dev.mt-2.float-right(data-id=device._id) Edit
+                        if user
+                            button.btn.btn-info.edit-dev.mt-2.float-right(data-id=device._id) Edit
