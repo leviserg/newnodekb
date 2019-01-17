@@ -103,7 +103,7 @@ html(lang="en")
         .modal-dialog.modal-md
             .modal-content
                 .modal-header.mb-0.mt-0
-                    h5.modal-title Edit-Device Form
+                    h6.modal-title Edit Form
                     button.close(type='button', data-dismiss='modal', aria-label='Close')
                         span(aria-hidden='true') ×
                 .modal-body
@@ -112,7 +112,7 @@ html(lang="en")
                             .col-6
                                 h2#ModDevTitle.mt-3.mb-3.text-info
                             .col-1.clear-fix
-                            .col-5
+                            .col-4
                                 img#ModImg.img-circle(style='width:100%')
                         form(method='post', name='ModForm', enctype="multipart/form-data")
                             .form-group
@@ -127,10 +127,11 @@ html(lang="en")
                             .input-group
                                 .custom-file
                                     input#moddevimg.custom-file-input(name='devimg', type='file', aria-describedby="devimgAddon")
-                                    label#imgfile.custom-file-label(for='moddevimg' style='color:lightgrey') Select Image
+                                    label.custom-file-label(for='moddevimg' style='color:lightgrey')
+                                        span#imgfile.small Select Image
                                 hr
-                            a#ModDelBtn.btn.btn-danger.mt-4.mb-2.ml-2.col-sm-4.col-md-3.float-right.del-dev(href='#') Delete
-                            input.btn.btn-info.mt-4.mb-2.ml-2.mr-2.col-sm-4.col-md-3.float-right(type='submit', value='Save')
+                            input.btn.btn-info.mt-3.mb-1.ml-2.col-sm-4.col-md-3.float-right(type='submit', value='Save')
+                            a#ModDelBtn.btn.btn-danger.mt-3.mb-2.ml-2.col-sm-4.col-md-3.float-right.del-dev(href='#') Delete
 
         script(type='text/javascript', src='/bower_components/jquery/dist/jquery.min.js')
         script(type='text/javascript', src='/bower_components/bootstrap/dist/js/bootstrap.js')
