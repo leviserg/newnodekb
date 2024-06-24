@@ -1,0 +1,794 @@
+1. ======= Create Template And Install Pug View Engine ==========
+
+Create Projects Dir {C:\NodeProjects}
+
+	1.1  _Create Application Dir {C:\NodeProjects\nodekb}
+	1.2  _Run GitBash at Application Dir (right click at folder->run GitBash)
+		 or open App folder in VSCode and run new Terminal there
+		 or Shift+RightClick at folder and select "open in command line..."
+	1.3  _Create package.json : run "> npm init" in command line
+	1.4  _Modify app description/version/ entry point (index.js) app.js - entry point
+		 will be called "app.js" instead of "index.js" / author : leviserg
+	1.5  _Create entry point file called "app.js" in app folder and check this run as
+		 console.log("Something...") in app.js file and run it through command line as
+		 "> node app.js" or "> node app". Check this working...
+	1.6  _Open "package.json" file and specify script which need to be run at node start
+		 (instead of "test": "echo \Error...")
+			  "scripts": {
+				"start": "node app"
+			  },
+	1.7  _Check starting app after "> npm start" command
+	1.8  _Add Express dependency in package.json (folder "node_modules" will be created
+		 inside app directory) as command:
+			> npm install --save express
+	1.9  _Add Express as require component in application (in entry point file "app.js"):
+			const express = require('express');
+			const app = express();
+			/* app send to Server */
+			app.get('/', function(req, res){
+				res.send('Hello World');
+			});
+				/* or in ES5 standart: */
+				/*
+					app.get('/', function(req, res){
+						res.send('Hello World');
+					});
+				*/
+			/* app listen to Server */
+			app.listen(3000, function(){
+				console.log('Server started on port 3000...')
+			});
+	1.10 _Check Server running "> npm start" in Browser "127.0.0.1:3000" and in console.
+		 Use Ctrl+C in command line to exit from app running and stop server.
+	1.11 _Install App Dependency from Pug As View Template Engine
+			> npm install --save pug
+	1.12 _Load View Engine Pug in app.js (below init app: const app = express();...)
+			const path = require('path');
+			app.set('views', path.join(__dirname, 'views'));
+			app.set('view engine', 'pug');
+				// template should be situated in folder 'views' in current directory,
+				// which mean the '__dirname' attribute
+		 _Create folder called 'views' in app folder
+		 _Create file 'index.pug' in 'views' folder
+			{pug extension in VSCode should be installed}
+			- put something in index.pug for check
+			- set res.render('index') instead of res.send('...') in Home Route of app.js
+		 _Start server aganin "> npm start" and check Pug Engine Loaded
+	1.13 _Create Base Web Page using Pug (note: without tag backets < /> and closing tags.
+		 Be careful with Tab spaces! Use Extension Snippets.
+		 Use #{argname}, which should be sent from Route in app.js, for example:
+		 = app.js = :
+			app.get('/', (req, res) => {
+				//res.send('Hello World');
+				res.render('index', {
+					pagetitle:'My Articles'
+				});
+			});
+		 = index.pug = :
+			 html(lang="en")
+				head
+					meta(charset="UTF-8")
+					meta(name="viewport", content="width=device-width, initial-scale=1.0")
+					meta(http-equiv="X-UA-Compatible", content="ie=edge")
+					title KnowledgeBase
+				body
+					h1 #{pagetitle}
+	1.14 _Install nodemon for automatic restart Server after changing app.js file:
+		 > npm install -g nodemon {-g means global install - independent of app diretory}
+		 if the nodemon was intalled before then check it running as 
+		 > nodemon {in current app folder}
+	1.15 _Add Route in app.js to add article to application. Check in browser
+	1.16 _Create layout.pug in 'views' directory which should hold base tags
+		 {html, head, body ...). Then other Pages should be extended from 'layout.pug'
+		 with 'block content' tag.
+	1.17 Use = with tagname for showing data from arguments from app.js {li=}
+
+2. ======= Working with MongoDB through Mongoose ORM ==========
+
+	2.1	 _Check if MongoDB is installed (in C:\mongodb folder). If not then install
+			MongoDB there (see ConspectMongoDBInst... of Working with MongoDB).
+	2.2	 _Run "cmd.exe" with Administrator rights and go to C:\mongodb\bin folder through
+		 "cd.." command.
+		 _Run "> C:\mongodb\bin>net start MongoDB"
+		 _Run "> C:\mongodb\bin>mongod --bind_ip 127.0.0.1" to avoid warnings with
+		 working with localhost or use --bind_ip_all to response to all ip-addresses
+		 _Run "> C:\mongodb\bin>mongo" and then
+			  "> ls()" to check installed plugins for work with MongoDB
+			  "> show dbs" to check Mongo databases at serverside (localhost)
+	2.3	 _Add new Database, called the same as Application (nodekb for eaxmple)
+				"> use nodekb"
+		2.3.1 Insert some records to Database as Collection (field `id` will put
+			   automatically)
+				"> db.createCollection('devices');"
+			  further name of collection should be used:
+				"> db.devices.insert([{title:"Device #4", protocol: "FreeBus 232", description: "Baudrate 9600 8n1, Accessible Registers 1-256"}, {title:"Device #5", protocol: "M-Bus", description: "Baudrate 9600 8n1, Accessible Registers 101-202"}]);"
+				"> db.devices.find();" or "> db.devices.find().pretty();"
+				Command line may shutdown by "exit" command (twice - to mongod and to cmd).
+		2.3.2 _Install Mongoose.js in app folder (from VSCode Terminal or GitBash)
+				"$ npm install --save mongoose"
+				and run nodemon again "$ nodemon" for start Server
+		2.3.3 _Include downloaded module of Mongoose in app.js
+				const mongoose = require('mongoose');
+				mongoose.connect('mongodb://localhost/devices');
+				let db = mongoose.connection;
+				/*
+					mongoose.connect('mongodb://localhost/{database name}');
+				*/
+	2.4 _Work with models {for database connection through ORM}:
+		2.4.1 _Create folder 'models' and file called 'device.js'
+		2.4.2 _Edit model file as follow:
+					let mongoose = require('mongoose');
+					// Model Table Schema
+					let deviceSchema = mongoose.Schema({
+						title:{
+							type: String,
+							required: true
+						},
+						protocol: {
+							type: String,
+							required: true       
+						},
+						description: {
+							type: String,
+							required: true        
+						}
+					});
+
+					let Device = module.exports = mongoose.model('Device', deviceSchema);
+				
+		2.4.3 _Return to app.js and check for DB errors:
+				// Check Db connection
+				db.once('open', () => {
+					console.log('Connected to MongoDB successful...');
+				});
+				// Check Db error
+				db.on('error', (err) => {
+					console.log(err);
+				});
+		2.4.4 _Get data in Models in app.js
+				// Get Data from Models
+				
+				let Device = require('./models/device');
+				
+			and set Data to HomeRoute (instead of static array as was shown before)
+			
+	2.5 _Insert data to Database using model and BodyParser
+		2.5.1 _Create a form for adding records to the Database at the 'add_device.pug'
+				page:
+				
+				form(action="/devices/add", method="post")
+					#form-group
+						label Title:
+						input.form-control(name='title', type="text")
+					#form-group
+						label Protocol:
+						input.form-control(name='protocol', type="text")
+					#form-group
+						label Description:
+						textarea.form-control(name="description")
+					input.btn.btn-primary(type="submit", value="Submit")
+				
+		2.5.2 _Install BodyParser for access to html form tags values from Node.js.
+				Stop Server Ctrl+C
+				Run
+					$ npm install --save body-parser
+				
+			  _Include body-parser middleware in app.js
+			  
+				const bodyParser = require('body-parser');
+					app.use(bodyParser, urlencoded({ extended:false }));
+					app.use(bodyParser.json());
+
+		2.5.3 _Set Route for POST method of form in app.js
+			  
+				app.post('/devices/add', (req, res) => {
+					  let device = new myDevice();
+						device.title = req.body.title;
+						device.protocol = req.body.protocol;
+						device.description = req.body.description;
+
+						device.save((err) => {
+							if(err){
+								console.log(err);
+								return false;
+							} else {
+								res.redirect('/');
+							}
+						});
+				});
+
+3. ======= FrontEnd Bower & Bootstrap, Update & Delete, Join ==========
+
+	3.1	_Create a 'public' folder for scripts and css data location.
+	3.2 _Set 'public' folder as a static folder:
+			app.js after bodyParser declaration:
+			
+				app.use(express.static(path.join(__dirname, 'public')));
+	
+	3.3 _Install Bower.JS - all dependencies will be installed (include jQuery,
+		Bootstrap). Run in command line
+			$ npm install -g bower // to install globally and it will be
+									accessed in each project
+			$ npm install --save bower // install in local project
+	3.4 _Create file '.bowerrc' at the application root folder for bower
+			components definition:
+				{
+					"directory": "public/bower_components"
+				}
+	3.5 _Install bootstrap using command line:
+			$ bower install bootstrap
+			$ bower install jquery
+	3.6 _Include css link at the head of 'layout.pug'
+			link(href="/bower_components/bootstrap/dist/css/bootstrap.css", rel="stylesheet")
+	3.7 _Use bootstrap classes (nav, container, list-group, row, col etc.)
+			navbar in 'layout.pug' (use html to jade/pug online converter)
+		3.7.1 Create  d r o p d o w n  list with hover:
+			- mystyles.css and link in layout.pug:
+				link(href="/bower_components/bootstrap/dist/css/mystyles.css", rel="stylesheet")
+				
+				//- and navbar with block navcontent
+				
+				        nav.navbar.navbar-expand-lg.navbar-dark.bg-info
+							a.navbar-brand(href='/') Node Devices DB
+							button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarContent', aria-controls='navbarContent', aria-expanded='false', aria-label='Toggle navigation')
+								span.navbar-toggler-icon
+							#navbarContent.collapse.navbar-collapse
+								ul.navbar-nav.mr-auto
+									li.nav-item.active
+									a.nav-link(href='/')
+										| Home 
+										span.sr-only (current)
+									li.nav-item
+										a.nav-link(href='/devices/add') Add Device
+									li.nav-item.dropdown
+										a.nav-link.dropbtn Devices
+										.dropdown-content
+											block navcontent
+				
+				
+			- styles:
+				  .dropdown:hover .dropdown-content {
+					display: block;
+				  }
+
+				  .dropdown-content {
+					display: none;
+					position: absolute;
+					background-color: #f9f9f9;
+					min-width: 160px;
+					box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+					z-index: 1;
+				  }
+				  
+				  .dropdown-content a {
+					float: none;
+					color: black;
+					padding: 12px 16px;
+					text-decoration: none;
+					display: block;
+					text-align: left;
+				  }
+				  
+				  .dropdown-content a:hover {
+					background-color: #17A2B8;
+					color:white;
+				  }
+				  
+			- put block navcontent before base content:
+				block navcontent
+					each device, i in devices
+						a(href="/device/" + device._id)= device.title
+				
+	3.8 _GetOne and Update:
+	
+		3.8.1 Create Page called 'device.pug' with form for update values:
+		
+		extends layout
+		block content
+			h2.mb-3.mt-3 Edit Device
+			form(action="/device/"+showDevice._id, method="post")
+				#form-group
+					label.small Title:
+					input.form-control(name='title', type="text", value=showDevice.title)
+				#form-group
+					label.small.mt-2 Protocol:
+					input.form-control(name='protocol', type="text", value=showDevice.protocol)
+				#form-group
+					label.small.mt-2 Description:
+					textarea.form-control(name="description")= showDevice.description
+				input.btn.btn-success.mt-3.mr-2.col-sm-4.col-md-2(type="submit", value="Save")
+			a.btn.btn-primary.mr-2.col-sm-4.col-md-2(href="/") Back
+			
+			3.8.2 Create routes in entry point file 'app.js'
+			
+				// **** GET Single Device Data
+					app.get('/device/:id', (req, res) => {
+						myDevice.findById(req.params.id, (err, data) => {
+							if(err){
+								return console.error(err);
+							}
+							else{
+								// console.log(data);
+								res.render('device', {
+									showDevice: data
+								});
+							}
+						});
+					});
+
+				// **** Edit Submit POST Route
+				
+					app.post('/device/:id', (req, res) => {
+						let device = {};
+						device.title = req.body.title;
+						device.protocol = req.body.protocol;
+						device.description = req.body.description;
+
+						let query = {_id:req.params.id};
+						
+						myDevice.updateOne(query, device, (err) => {
+							if(err){
+								console.log(err);
+							} else {
+								res.redirect('/');
+							}
+						});
+					});	
+			
+	3.9 _Delete Record
+
+		3.9.1 Create Button in form at 'device.pug' page with attributes
+			
+			a.btn.btn-danger.mt-3.mr-2.col-sm-4.col-md-2.del-dev(href="/", data-id=showDevice._id) Delete
+		
+		3.9.2 Create script file and include link to script file at 'layout.pug'
+			Put ajax request to script:
+			
+				$(document).ready(()=>{
+					$('.del-dev').on('click', (e)=>{
+						$target = $(e.target);
+						const id = $target.attr('data-id');
+						$.ajax({
+							type:'DELETE',
+							url:'/device/'+id,
+							success: ()=>{
+								alert('Deleting Device');
+								window.location.href='/';
+							},
+							error: (err)=>{
+								console.log(err);
+							}
+						});
+					});
+				});
+
+		3.9.3 Create route for ajax DELETE action in app.js:
+			
+			// DELETE Route
+				app.delete('/device/:id', (req, res) => {
+					let query = {_id:req.params.id}; 
+					myDevice.deleteOne(query, (err) => {
+						if(err){
+							console.log(err);
+						}
+						res.send('Deleted...');
+					});
+				});
+		
+		3.9.4 Use reference type to ObjectId in Schema file js and populate() for join collections in app.js:
+			    // *** Schema file :
+				
+				protocol: {
+					type: Schema.Types.ObjectId,
+					ref: 'protocols',
+					required: true     
+				}
+				
+				// *** entry point file {app.js}
+				
+				app.get('/', (req, res) => {
+					myDevice.find((err, data) => {
+						if(err){
+							return console.error(err);
+						}
+						else{
+							res.render('index', {
+								pagetitle:'Digital Devices',
+								devices: data
+							});
+						}
+					}).populate('protocol').sort({_id:-1});
+				});
+
+				// *** in view *.pug file
+				
+				ul.list-group
+					each device, i in devices
+						li.list-group-item
+							b
+								a(href="/device/" + device._id)= device.title + "."
+							p= device.protocol.name + ", " + device.protocol.layer + ". "
+								i= device.description
+
+4. ==== Messaging & Validation ====== (express-messages & sessions)
+
+	4.1 Install components
+	
+		$ npm install --save express-messages
+		$ npm install --save express-session
+		$ npm install --save express-validator
+		$ npm install --save connect-flash
+		
+		or all in one:
+		
+		$ npm install --save express-messages express-sessions express-validator connect-flash
+		
+		$ npm audit fix     to fix warnings
+
+	4.2 Create vars expressValidator & flash & session
+	
+			const expressValidator = require('express-validator');
+			const flash = require('connect-flash');
+			const session = require('express-session');
+		
+	4.3 Create Express Middleware in app.js
+		// *** Session Middleware
+			app.use(session({
+				secret: 'keys',
+				resave: false,
+				saveUninitialized: true,
+				cookie:{
+					secure: true
+				}
+			}));
+		// *** Messages Middleware
+			app.use(require('connect-flash')());
+			app.use((req, res, next)=>{
+				res.locals.messages = require('express-messages)(req, res);
+				next();
+			});
+		// *** Validator Middleware
+			app.use(expressValidator({
+				errorFormatter: (param, msg,value) => {
+					var namespace	= param.split('.')
+					, root			= namespace.shift()
+					, formParam		= root;
+					while(namespace.length){
+						formParam += '[' + namespace.shift() + ']';
+					}
+					return{
+						param	: formParam,
+						msg		: msg,
+						value	: value
+					};
+				}
+			}));
+		
+	4.4 Create Custom User Interface for Messages (views/message.pug)
+		4.4.1 ----- New File views\message.pug
+		
+			.messages
+				each type in Object.keys(messages)
+					each message in messages[type]
+						div(class="alert-alert"+type) #{message}
+
+		4.4.2 ----- Call message.pug in template views\layout.pug before
+					block content 	//- call message.pug
+					
+					!= messages('message', locals)
+	
+	4.5 Use req.flash('success', 'Device Added') for example for add device route
+		before redirect to the main page:
+		
+			// add post route or edit post route:
+			
+                req.flash('success', 'Device Data has been ...');// added updated etc
+                res.redirect('/');
+		
+			Change Session Middleware to 
+			
+				app.use(session({
+					secret: 'keys',
+					resave: true,
+					saveUninitialized: true
+				}));
+				
+	4.6 Submitting Forms with expressValidator:
+		// Put rules at the beginning of route function:
+			
+			req.checkBody('title', 'Title is required').notEmpty();
+			req.checkBody('protocol', 'Protocol is required').notEmpty(); ???????? ObjectId
+			req.checkBody('description', 'Description is required').notEmpty();
+			
+		// Get validation errors:
+		
+			let errors = req.validationErrors();
+			
+		// Check for errors:
+		
+			if(errors){
+				res.render('add_device', {
+					.... title ... protocol ... description ...
+					errors: errors
+				});
+			}
+			else{
+				// ....
+			}
+			
+	4.7 Put Routes into separate file:
+	
+		// Create folder 'routes' and files 'devices.js', 'protocol.js', 'search.js' inside
+		
+			const express = require('express');
+			const router = express.Router();
+			let myProtocol = require('../models/protocol'); // Conn. to Schemas !! ../models - to upper folder
+			let myDevice = require('../models/device');
+			
+		// Cut from app.js all routes except home route ('/') and paste them into routes.js.
+		// Replace all links 'app' to 'router' {.get, .post, .delete etc}
+			
+			app.get... =>  router.get...
+			.... 
+			module.exports = router; // put at the end of route file {devices.js, search.js ...}
+		
+		// Create link to 'router.js' from app.js if user try to go to route different from '/'
+		// Check all links in forms and and <a> tags for routes matching
+		
+			let DeviceRoutes = require('./routes/devices.js');
+			let ProtocolRoutes = require('./routes/protocols.js');
+			let SearchRoutes = require('./routes/search.js');
+
+			app.use('/device', DeviceRoutes);
+			app.use('/protocol', ProtocolRoutes);
+			app.use('/search', SearchRoutes);
+			
+5. ==== User Registration with bcryptjs for Node.js ====== { passportjs.org }
+	
+	5.1 Install Local Passport from passportjs.org And bcrypt
+		
+		$ npm install --save passport passport-local bcryptjs
+	
+	5.2 Create Schema for Users {logins & passwords} // 'models/user.js'
+		
+		const mongoose = require('mongoose');
+		const UserSchema = new mongoose.Schema({
+			username: {
+				type: String,
+				required: true       
+			},
+			email: {
+				type: String,
+				required: true        
+			},
+			nickname: {
+				type: String,
+				required: true        
+			},
+			password: {
+				type: String,
+				required: true        
+			}
+		});
+		const User = module.exports = mongoose.model('users', UserSchema);
+		
+		/* = module.exports = using because we need to use Schema outside as a link */
+	
+	5.3 Create a route file for users 'routes/users.js':
+	
+		const express = require('express');
+		const router = express.Router();
+
+		let myUser = require('../models/user');
+
+		// Registration Form
+		router.get('/register', (req, res) => {
+			res.render('register'); // don't forgive to create a view page 'register.pug' 
+		});
+		and other...
+	
+	5.4 Call route file for users in app.js (like for device/search routes...)	
+		
+		let UsersRoutes = require('./routes/users');
+		app.use('/users', UsersRoutes);
+		
+	5.5 Create 'views/register.pug' file for user registration form
+	5.6 Create 'views/login.pug' file for user login form		
+
+	5.7 Create routes for register/login post methods with expressValidation and
+		bcrypt.genSalt() as in routes/users.js file.
+		
+6. ==== User Login with Passportjs for Node ====== { passportjs.org }
+
+	6.1 Create folder 'config' with two files 'passport.js' & 'database.js'
+	
+		- database.js
+		
+			module.exports = {
+				database: 'mongodb://localhost:27017/nodekb',
+				secret: 'mysecret'
+			}
+			
+			// 27017 - default port for mongodb
+			// use config.database as a connection string to db in app.js
+			
+			// 		const mongoose = require('mongoose');
+			//		mongoose.connect(config.database, {
+			//			useNewUrlParser: true
+			//		});
+
+		- passport.js - as in the example
+		
+	6.2 Use Passport in :
+	
+			- app.js
+			
+				const passport = require('passport');
+				
+				and as a middleware
+				
+					// ---- Passsport Middleware
+					require('./config/passport')(passport);
+					app.use(passport.initialize());
+					app.use(passport.session());
+		
+			- routes/users.js
+			
+					const bcrypt = require('bcryptjs');
+					const passport = require('passport');
+
+					// Login Form Post
+
+					router.post('/login', (req, res, next) => {
+						passport.authenticate('local', {
+							successRedirect:'/',
+							failureRedirect: '/users/login',
+							failureFlash: true
+						})(req, res, next);
+					});
+	
+	6.3 Create Global Variable 'user' to check if user logged in
+		(as a route with * - means all routes):
+		
+				app.get('*', (req, res, next)=>{
+					res.locals.user = req.user || null;
+					next();
+				});
+	
+		set invisible login/register if user is logged in - layout.pug - navbar list
+			and show link 'Logout':
+			
+			    ul.navbar-nav.ml-auto
+                    if user
+                        li.nav-item.text-center
+                            a.nav-link(href='/users/logout') Logout
+                    else
+                        li.nav-item.text-center
+                            a.nav-link(href='/users/login') Login
+                        li.nav-item.text-center
+                            a.nav-link(href='/users/register') Register
+							
+		set route to logout in routes\users.js
+		
+			// Logout link Get
+
+			router.get('/logout', (req, res) => {
+				req.logout();
+				req.flash('success', 'You are logged out.')
+				res.redirect('/users/login');
+			});
+		
+7. ==== User Access with Passportjs for Node ====== { passportjs.org }
+
+	The main purpose - defence routes app in browser address line when user wasn't auth.
+
+	7.1 Create function ensureAuthenticated() in 'routes/devices.js' at the bottom
+	
+		    function ensureAuthenticated(req, res, next){
+				if(req.isAuthenticated()){
+					return next();
+				} else {
+					req.flash('danger', 'Please login');
+					res.redirect('users/login');
+				}
+			}
+	
+	7.2 Add specified function as a second parameter to route (add device for example)
+
+		// Add Device - new Page
+		router.get('/add', ensureAuthenticated, (req, res) => {
+			myProtocol.find((err, data) => {
+				if(err){
+					return console.error(err);
+				}
+				else{
+					res.render('add_device', {
+						pagetitle:'Add Device',
+						protocols: data
+					});
+				}
+			});
+		});	
+		
+		// Get Single Device Data
+		router.get('/:id', ensureAuthenticated, (req, res) => {
+			myDevice.findById(req.params.id, (err, data) => {
+				if(err){
+					return console.error(err);
+				}........
+	
+	7.3 Use re.user._id for check if user is logged in {for example for delete action}
+
+		    router.delete('/:id', (req, res) => {
+				if(!req.user._id){
+					res.status(500).send();
+				} else {
+					let query = {_id:req.params.id}; 
+					myDevice.deleteOne(query, (err) => {
+						if(err){
+							console.log(err);
+						}
+						res.send('Deleted...');
+					});
+				}
+			});
+
+8. ==== Deployment for Node ======			
+
+	8.1 Git
+	
+		- move the app to git:
+			- git init
+			- git add .
+			- git commit -m "commit description"
+			- git remote add origin https://github.com/leviserg/nodekb.git
+			- git push -u origin master
+	
+	8.2 Heroku	
+	
+		- Create an account at Heroku web-site
+		- Create a Node.js project (from Get Started) -> I'm ready to start
+		- Download heroku.exe for Windows version from heroku web-site And install it
+		- Install Heroku CLI (Installed as an extendion in VSCode)
+		- Run > heroku login
+		- Run > heroku create
+		- Run > git push heroku master
+		
+	8.3 MongoDB Lab
+	
+		- goto mlab.com - create an account / login there
+		- create new MongoDB Deployments / Single Node / Create DB nodekb -> ?ds251894?/nodekb will be created 
+		- create collections 'users' & 'devices'
+		- create database user (leviserg/aa111274 for example)
+	
+	To connect using a driver via the standard MongoDB URI	{preferred way}
+		mongodb://<dbuser>:<dbpassword>@ds251894.mlab.com:51894/nodekb
+		
+		mongodb://leviserg:aa111274@ds251894.mlab.com:51894/nodekb - paste this intp config/database.js file
+		
+		module.exports = {
+			database: 'mongodb://leviserg:aa111274@ds251894.mlab.com:51894/nodekb',
+			secret: 'mysecret'
+		}
+		
+	To connect using the mongo shell: 	
+		> mongo ds251894.mlab.com:51894/nodekb -u <dbuser> -p <dbpassword> 
+		
+		push changes to heroku:
+		
+		- git add .
+		- git commit -am 'commit description - updated mongo connection'
+		- git push heroku master
+		
+		
++++ RUN & ENJOY+++  https://fierce-sands-43397.herokuapp.com {user:1234, leviserg:1111}
+
+	
+
+	
+	
+
+	
+		
+		
+	

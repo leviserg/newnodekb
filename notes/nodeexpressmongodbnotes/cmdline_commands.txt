@@ -1,0 +1,160 @@
+
+	1) Install MongoDB from *.msi package and then create in install directory dir ../data/db and ../log
+
+	Call cmd.exe !!! with  a d m i n i s t r a t o r  rights
+	
+	...> cd .. (up to drive C:\)
+	
+	C:\> cd mongodb\bin
+	
+	C:\mongodb\bin>mongod --directoryperdb --dbpath C:\mongodb\data\db --logpath C:\mongodb\log\mongo.log --logappend --install
+	...
+	C:\mongodb\bin>net start MongoDB
+	...
+	
+	C:\mongodb\bin>mongo
+	...
+	
+	  > show dbs
+		...
+	  > use mybank    // {dbname}
+	
+	> db.createUser({
+		user:"joe",
+		pwd:"1111",
+		roles:["readWrite","dbAdmin"]
+	 });
+	...
+	
+	> db.createCollection('cutomers');
+	...
+	
+	> show collections
+	...
+	
+	>db.customers.insert({ fname:"John", lname:"Doe", age:45});
+	...
+	
+	>db.customers.find();
+	...
+	
+	// insert array of objects
+
+	> db.customers.insert([{ fname:"Jack", lname:"Fast", age:30},{fname:"Kate", lname:"Jackson", age:28}]);
+	
+	> db.customers.find().pretty();
+	
+	// **** update object property ****
+	> db.customers.update({fname:"Jack"},{fname:"Jack", lname:"Faster", gender:"male"});
+	
+	// **** set property (or update) ****
+	> db.customers.update({fname:"Jack"},{$set:{age:35}});
+	
+	// **** increment object property ****
+	> db.customers.update({fname:"Jack"},{$inc:{age:2}});
+	
+	// **** delete object property ****
+	> db.customers.update({fname:"Jack"},{$unset:{age:0}});
+	
+	// **** find for update or insert ****
+	> db.customers.update({fname:"Julia"},{fname:"Mary", lname:"Nickson",age:39, gender:"female"},{upsert:true});
+
+	// **** rename object property ****
+	> db.customers.update({fname:"Mary"},{$rename:{"age":"years"}});
+
+	// **** delete object ****
+	> db.customers.remove({fname:"John"});
+	> db.customers.remove({fname:"John"},{justOne:true});
+	
+	// **** insert big data (with arrays and objects inside) ****
+	
+	> db.customers.insert([
+		{
+			fname:"Nick",
+			lname:"Jackson",
+			gender:"male",
+			address:{
+				street:"somestreet",
+				city: "London",
+				state:"GB"
+			},
+			memberships:["mem1", "mem2"],
+			balance:125.32,
+			age:45
+		},
+		{
+			fname:"Sally",
+			lname:"Oldfield",
+			gender:"female",
+			address:{
+				street:"anystreet",
+				city: "New York",
+				state:"USA"
+			},
+			memberships:["mem0", "mem2"],
+			balance:333.44,
+			age:34
+		},
+		{
+			fname:"Kate",
+			lname:"Stanton",
+			gender:"female",
+			address:{
+				street:"1st street",
+				city: "Athens",
+				state:"Greece"
+			},
+			memberships:["mem1", "mem3"],
+			balance:1200.44,
+			age:30
+		},
+		{
+			fname:"Jack",
+			lname:"Nickson",
+			gender:"male",
+			address:{
+				street:"2nd street",
+				city: "Paris",
+				state:"France"
+			},
+			memberships:["mem0", "mem3"],
+			balance:758.61,
+			age:20
+		}
+	]);
+	
+	// **** find data with condtitions ****
+	> -- example -- : db.customers.find({property:value})
+	> db.customers.find({fname:"Nick"})
+	> db.customers.find({$or:[{fname:"Nick"},{fname:"Mary"}]});
+	> db.customers.find({years:{$gt:30}}); // $gt = great then / $lt / $gte / $lte
+	> db.customers.find({$or:[{balance:{$gt:150}},{fname:"Kate"}]}).pretty();
+	
+	// **** find in inside object (in example - address) - remember - "" - if object
+	> db.customers.find({"address.city":"anycity"}).pretty();
+	
+	// **** find in inside array (in example - memberships) - remember - without "" - if array
+	> db.customers.find({memberships:"mem1"}).pretty();	
+		
+	// **** sorting data ****
+	> db.customers.find().sort({fname:1}).pretty(); // 1 - ascend order / -1 - descend order
+	
+		// **** limits ****
+	> db.customers.find().limit(2).pretty();
+	> db.customers.find().sort({fname:1}).limit(2).pretty();
+	> db.customers.find().limit(3).sort({fname:-1}).pretty();
+	
+	// **** count ****
+	> db.customers.find().count();
+	> db.customers.find({balance:{$gt:100}}).count();
+	
+	// **** select data category (forEach) ****
+	> db.customers.find().forEach(function(prop){print("Property fname : " + prop.fname)});
+	
+	
+	
+	
+	
+	
+	
+	

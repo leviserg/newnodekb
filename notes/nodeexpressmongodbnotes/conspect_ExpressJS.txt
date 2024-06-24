@@ -1,0 +1,121 @@
+run in command terminal(git bash, windows shell etc): npm init
+...
+entry point: (index.js) app.js
+author:...
+....
+Is it ok? yes
+... creaing package.json file... 
+complete the file with a) dependencies OR b) run commands from command prompt
+a) before author tag in package.json file
+"dependencies":{
+    "express":"*", -- * mean last version
+    "body-parser":"*"
+}
+run npm install    - should download dependencies
+/* b)
+$ npm install body-parser --save
+$ npm install express --save
+...
+*/
+----------------
+create file that was specified as entry point: app.js in app dir
+
+run  node app at command line to check
+############## Start Server at 127.0.0.1:3000 ##########
+> node app
+##############
+create routes as app.get(...)
+
+create middleware (has access to request/response between client and server)
+as for example logger function in app.js
+and use middleware as app.use(middlewareFunctionvar)
+
+!!! important !!!
+put middleware function and var  b e f o r e  route and call server
+
+> npm install nodemon -g {-g means globally for automatically complile}
+                        {and run node application and automaticall restart}
+                        {server side after code changing}
+> nodemon 
+ctrl + C for stop nodemon and then
+install ejs tamplate for simple creating web pages from template
+> npm install ejs --save {automaticall added to dependecies in package.json}
+
+add middleware view engine before bodyParser
+- app.set('view engine', 'ejs');
+add path to views
+- app.set('views', path.join(__dirname, 'views'));
+add dir 'views' in app dir for saving ejs files (view file)
+show page in routes as res.render (instead of .send)
+<link rel="shortcut icon" href="public/favicon.ico">
+**** ejs ****
+use <%= for output
+use <% for scrpit action (conditions/cycles etc)
+*************
+if server must get some values from user from form set method post and route in app.js
+- app.post({route}, function(req, res)...)
+
+> npm install express-validator --save
+get validator as require('express-validator')
+set validator middleware (copy from github)
+
+***************** mongoDB ***************** {run cmd.exe as administrator}
+> cd.. -> C:\mongodb\bin
+...
+>C:\mongodb\bin\> mongo
+...
+> show dbs
+....
+> use customerapp {using MongoDB/mycustomers database} 
+...// db.dropDatabase() - for deleting database
+> db.createCollection('users') {use db.collectioName.drop() for remove collection}
+...
+> show collections
+...
+********
+** with object structure:
+**    {
+**        fname:"Kate",
+**        lname:"Stanton",
+**        age:30 
+**   }
+*******
+> db.users.insert([
+    {
+        fname:"Kate",
+        lname:"Stanton",
+        age:30 
+    },
+    {
+        fname:"Mary",
+        lname:"Poppins",
+        age:16 
+    },
+    {
+        fname:"John",
+        lname:"Doe",
+        age:40
+    }    
+])
+> db.users.find().pretty() {check records}
+
+******* install mongojs ********
+
+> npm install mongojs --save
+
+// include mongojs in app.js as
+var mongojs = require('mongojs');
+
+// select db and collection (as table)
+// var db = mongojs({dbname},['collectionName1','collectionName2'...]]);
+var db = mongojs(customerapp,['users']);
+var ObjectId = mongojs.ObjectId;
+
+** work with mongojs lib **
+db.users.find() == select...
+db.users.insert() == insert...
+
+** use jquery.js for deleting records as script src in public dir **
+
+
+

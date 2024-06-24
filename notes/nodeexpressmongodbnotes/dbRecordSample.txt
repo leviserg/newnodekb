@@ -1,0 +1,19 @@
+db.createUser({
+	user:"joe",
+	pwd:"1111",
+	roles:["readWrite","dbAdmin"]
+});
+
+db.createCollection('cutomers');
+
+db.customers.insert({ fname:"John", lname:"Doe", age:45});
+
+db.customers.find();
+
+// insert array of objects
+
+db.customers.insert([{ fname:"Jack", lname:"Fast", age:30},{fname:"Kate", lname:"Jackson", age:28}]);
+
+db.customers.find().pretty();
+
+db.customers.update({fname:"Jack"},{lname:"Faster", gender:"male"});
